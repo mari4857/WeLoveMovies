@@ -1,2 +1,1 @@
-# we-love-movies
-# WeLoveMovies
+# WeLoveMovies Backend Application
