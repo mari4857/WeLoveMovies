@@ -1,30 +1,6 @@
 const knex = require("../db/connection");
 const mapProperties = require("../utils/map-properties");
 
-function list() {
-  return knex("movies").select("*").groupBy("movies.movie_id");
-}
-
-function listShowing() {
-  return knex("movies")
-    .join("movies_theaters", "movies.movie_id", "movies_theaters.movie_id")
-    .select("movies.*")
-    .where({ "movies_theaters.is_showing": true })
-    .groupBy("movies.movie_id");
-}
-
-function read(movieId) {
-  return knex("movies").select("*").where({ movie_id }).first();
-}
-
-function listTheaters() {
-  return knex("movies_theaters")
-    .join("movies", "movies.movie_id", "movies_theaters.movie_id")
-    .join("theaters", "movies_theaters.theater_id", "theaters.theater_id")
-    .select("theaters.*")
-    .groupBy("theaters.theater_id");
-}
-
 function addCritic(movies) {
   return movies.map((movie) => {
     return {
@@ -47,6 +23,26 @@ function addCritic(movies) {
   });
 }
 
+function list() {
+  return knex("movies").select("*").groupBy("movies.movie_id");
+}
+
+function listShowing() {
+  return knex("movies")
+    .join("movies_theaters", "movies.movie_id", "movies_theaters.movie_id")
+    .select("movies.*")
+    .where({ "movies_theaters.is_showing": true })
+    .groupBy("movies.movie_id");
+}
+
+function listTheaters() {
+  return knex("movies_theaters")
+    .join("movies", "movies.movie_id", "movies_theaters.movie_id")
+    .join("theaters", "movies_theaters.theater_id", "theaters.theater_id")
+    .select("theaters.*")
+    .groupBy("theaters.theater_id");
+}
+
 function listReviews(movieId) {
   // console.log(movieId);
   return knex("movies")
@@ -64,6 +60,10 @@ function listReviews(movieId) {
     )
     .where({ "reviews.movie_id": movieId })
     .then(addCritic);
+}
+
+function read(movie_id) {
+  return knex("movies").select("*").where({ movie_id }).first();
 }
 
 module.exports = {
